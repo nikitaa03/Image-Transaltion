@@ -1,0 +1,39 @@
+import cv2
+import numpy as np
+import math as m
+
+image=cv2.imread('C:\\Users\\Nikita\\Downloads\\nature.jfif',1)
+(row,col) = image.shape[:2]
+output_image=np.zeros(image.shape,dtype="uint8")
+count=0
+
+x,y=eval(input("enter the size of unit:"))
+
+
+    
+for i in range(0,row):
+    for j in range(0,col):
+        xs=i-x
+        ys=j-y
+        if m.ceil(xs)<row and m.ceil(ys)<col:
+            if xs>=0 and ys>=0:
+                IS_A=image[m.floor(xs),m.floor(ys)]
+                IS_B=image[m.floor(xs),m.ceil(ys)]
+                IS_C=image[m.ceil(xs),m.floor(ys)]
+                IS_D=image[m.ceil(xs),m.ceil(ys)]
+                dx=xs-m.floor(xs)
+                dy=ys-m.floor(ys)
+                IS_E=(1-dx)*(1-dy)*IS_A+(1-dx)*dy*IS_B+dx*(1-dy)*IS_C+dx*dy*IS_D
+                output_image[i,j]=IS_E
+        else:
+            count+=1
+            if count==row and count==col:
+                print("Out OF Bound")
+            
+cv2.namedWindow('original',cv2.WINDOW_NORMAL)
+cv2.imshow('original',image)
+cv2.namedWindow('transition',cv2.WINDOW_NORMAL)
+cv2.imshow('transition',output_image)
+cv2.waitKey()            
+        
+            
